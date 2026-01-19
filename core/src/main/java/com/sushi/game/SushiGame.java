@@ -12,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.sushi.game.asset.Asset;
 import com.sushi.game.asset.AssetService;
 
@@ -44,7 +41,7 @@ public class SushiGame extends Game {
 
         this.batch = new SpriteBatch();
         this.camera = new OrthographicCamera();
-        this.viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+        this.viewport = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         this.assetService = new AssetService(new InternalFileHandleResolver());
         this.glProfiler = new GLProfiler(Gdx.graphics);
         this.glProfiler.enable();

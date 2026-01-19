@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "objects.tsx",
+    "activeFile": "mao.tmx",
     "expandedProjectPaths": [
         "."
     ],
@@ -25,7 +25,7 @@
         },
         "mainSet.tsx": {
             "dynamicWrapping": false,
-            "scaleInDock": 0.5,
+            "scaleInDock": 2,
             "scaleInEditor": 1.5
         },
         "mao.tmx": {
@@ -35,11 +35,11 @@
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 204,
-                "y": 261.5
+                "x": 100.66666666666663,
+                "y": 114.66666666666663
             }
         },
         "objects.tsx": {
@@ -62,9 +62,9 @@
     "project": "samplesushi.tiled-project",
     "property.type": "Prop",
     "recentFiles": [
-        "mao.tmx",
-        "mainSet.tsx",
         "objects.tsx",
+        "mainSet.tsx",
+        "mao.tmx",
         "C:/gameDEV/sushiV1/assets/objects/char.tsx",
         "C:/gameDEV/sushiV1/assets/nigga.tsx",
         "C:/gameDEV/sushiV1/assets/trycharacters.tsx"

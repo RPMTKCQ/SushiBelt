@@ -1,5 +1,6 @@
 package com.sushi.game;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -17,6 +18,7 @@ public class GameScreen extends ScreenAdapter {
     private final AssetService assetService;
     private final Viewport viewport;
     private final OrthographicCamera camera;
+    private final Engine engine;
 
     private final OrthogonalTiledMapRenderer mapRenderer;
 
@@ -27,6 +29,9 @@ public class GameScreen extends ScreenAdapter {
         this.camera = game.getCamera();
         this.batch = game.getBatch();
         this.mapRenderer = new OrthogonalTiledMapRenderer(null  , SushiGame.UNIT_SCALE, this.batch);
+        this.engine = new Engine();
+
+        this,engine.
     }
 
     @Override

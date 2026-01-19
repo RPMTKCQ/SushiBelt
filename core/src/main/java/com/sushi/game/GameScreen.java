@@ -31,7 +31,7 @@ public class GameScreen extends ScreenAdapter {
         this.mapRenderer = new OrthogonalTiledMapRenderer(null  , SushiGame.UNIT_SCALE, this.batch);
         this.engine = new Engine();
 
-        this,engine.
+        this,engine;
     }
 
     @Override

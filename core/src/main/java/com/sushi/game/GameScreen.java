@@ -7,12 +7,17 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sushi.game.asset.AssetService;
 import com.sushi.game.asset.MapAsset;
 import com.sushi.game.system.RenderSystem;
+import com.sushi.game.tiled.TiledAshleyConfigurator;
+import com.sushi.game.tiled.TiledService;
+
+import java.util.function.Consumer;
 
 
 public class GameScreen extends ScreenAdapter {
@@ -22,6 +27,8 @@ public class GameScreen extends ScreenAdapter {
     private final Viewport viewport;
     private final OrthographicCamera camera;
     private final Engine engine;
+    private final TiledService tiledService;
+    private final TiledAshleyConfigurator tiledAshleyConfigurator;
 
 
 
@@ -31,16 +38,23 @@ public class GameScreen extends ScreenAdapter {
         this.viewport = game.getViewport();
         this.camera = game.getCamera();
         this.batch = game.getBatch();
+        this.tiledService = new TiledService(this.assetService);
         this.engine = new Engine();
+        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(this.engine,this.assetService);
 
-        this.engine.addSystem( new RenderSystem(this.batch,this.viewport));
+        this.engine.addSystem( new RenderSystem(this.batch,this.viewport,this.camera));
 
     }
 
     @Override
     public void show() {
-        this.assetService.load(MapAsset.MAIN);
-        this.engine.getSystem(RenderSystem.class).setMap(this.assetService.get(MapAsset.MAIN));
+        Consumer<TiledMap> renderConsumer = this.engine.getSystem(RenderSystem.class)::setMap;
+        this.tiledService.setMapChangeConsumer(renderConsumer);
+        this.tiledService.setLoadObjectConsumer(this.tiledAshleyConfigurator::onLoadObject);
+
+        TiledMap tiledMap = this.tiledService.loadMap(MapAsset.MAIN);
+        this.tiledService.setMap(tiledMap);
+
     }
 
     @Override

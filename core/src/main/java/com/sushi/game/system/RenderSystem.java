@@ -29,7 +29,7 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
     private final OrthographicCamera camera;
 
 
-    public RenderSystem(Batch batch, Viewport viewport) {
+    public RenderSystem(Batch batch, Viewport viewport, OrthographicCamera camera) {
         super(
             Family.all(Transform.class, Graphic.class).get(),
             Comparator.comparing(Transform.MAPPER::get)
@@ -49,7 +49,9 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
         this.mapRenderer.render();
 
         forceSort();
+        batch.begin();
         super.update(deltaTime);
+        batch.end();
     }
 
     @Override

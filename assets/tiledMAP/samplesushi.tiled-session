@@ -30,16 +30,17 @@
         },
         "mao.tmx": {
             "expandedGroupLayers": [
+                11,
                 5
             ],
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 100.66666666666669,
-                "y": 114.66666666666663
+                "x": 364.5,
+                "y": 173
             }
         },
         "objects.tsx": {
@@ -60,7 +61,7 @@
         "objects.tsx"
     ],
     "project": "samplesushi.tiled-project",
-    "property.type": "Prop",
+    "property.type": "bool",
     "recentFiles": [
         "objects.tsx",
         "mainSet.tsx",

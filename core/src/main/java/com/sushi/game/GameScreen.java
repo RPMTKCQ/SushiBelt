@@ -2,6 +2,8 @@ package com.sushi.game;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -13,41 +15,45 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sushi.game.asset.AssetService;
 import com.sushi.game.asset.MapAsset;
+import com.sushi.game.input.GameControllerState;
+import com.sushi.game.input.KeyboardController;
+import com.sushi.game.system.ControllerSystem;
+import com.sushi.game.system.MoveSystem;
 import com.sushi.game.system.RenderSystem;
 import com.sushi.game.tiled.TiledAshleyConfigurator;
 import com.sushi.game.tiled.TiledService;
 
+import java.security.Key;
 import java.util.function.Consumer;
 
 
-public class GameScreen extends ScreenAdapter {
-    private final SushiGame game;
-    private final Batch batch;
-    private final AssetService assetService;
-    private final Viewport viewport;
-    private final OrthographicCamera camera;
+public class    GameScreen extends ScreenAdapter {
     private final Engine engine;
     private final TiledService tiledService;
     private final TiledAshleyConfigurator tiledAshleyConfigurator;
+    private final KeyboardController keyboardController;
+    private final SushiGame game;
 
 
 
     public GameScreen(SushiGame game) {
         this.game = game;
-        this.assetService = game.getAssetService();
-        this.viewport = game.getViewport();
-        this.camera = game.getCamera();
-        this.batch = game.getBatch();
-        this.tiledService = new TiledService(this.assetService);
+        this.tiledService = new TiledService(game.getAssetService());
         this.engine = new Engine();
-        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(this.engine,this.assetService);
+        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(this.engine,game.getAssetService());
+        this.keyboardController = new KeyboardController(GameControllerState.class, engine);
 
-        this.engine.addSystem( new RenderSystem(this.batch,this.viewport,this.camera));
+        this.engine.addSystem(new ControllerSystem());
+        this.engine.addSystem(new MoveSystem());
+        this.engine.addSystem( new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
 
     }
 
     @Override
     public void show() {
+        game.setInputProcessors(keyboardController);
+        keyboardController.setActiveState(GameControllerState.class);
+
         Consumer<TiledMap> renderConsumer = this.engine.getSystem(RenderSystem.class)::setMap;
         this.tiledService.setMapChangeConsumer(renderConsumer);
         this.tiledService.setLoadObjectConsumer(this.tiledAshleyConfigurator::onLoadObject);

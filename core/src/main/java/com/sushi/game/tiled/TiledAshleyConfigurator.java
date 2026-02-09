@@ -9,7 +9,9 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.sushi.game.SushiGame;
 import com.sushi.game.asset.AssetService;
+import com.sushi.game.component.Controller;
 import com.sushi.game.component.Graphic;
+import com.sushi.game.component.Move;
 import com.sushi.game.component.Transform;
 
 public class TiledAshleyConfigurator {
@@ -33,9 +35,25 @@ public class TiledAshleyConfigurator {
             textureRegion.getRegionWidth(), textureRegion.getRegionHeight(),
             tileMapObject.getScaleX(), tileMapObject.getScaleY(),entity
         );
+        addEntityController(tileMapObject, entity);
+        addEntityMove(tile, entity);
 
 
         this.engine.addEntity(entity);
+    }
+
+    private void addEntityMove(TiledMapTile tile, Entity entity) {
+        float speed = tile.getProperties().get("speed", 0f, Float.class);
+        if(speed == 0f) return;
+
+        entity.add(new Move(speed));
+    }
+
+    private void addEntityController(TiledMapTileMapObject tileMapObject, Entity entity) {
+        Boolean controller = tileMapObject.getProperties().get("controller", false, boolean.class);
+        if(!controller) return;
+
+        entity.add(new Controller());
     }
 
     private void addEntityTransform(

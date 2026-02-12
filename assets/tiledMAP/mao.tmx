@@ -67,10 +67,10 @@
   <object id="133" name="player" gid="1034" x="368" y="143" width="32" height="32">
    <properties>
     <property name="controller" type="bool" value="true"/>
-    <property name="speed" type="float" value="2"/>
+    <property name="speed" type="float" value="3"/>
    </properties>
   </object>
-  <object id="134" gid="1035" x="165" y="206.5" width="32" height="32"/>
+  <object id="134" gid="1035" x="425" y="281" width="32" height="32"/>
   <object id="135" gid="1036" x="389" y="280.5" width="32" height="32"/>
  </objectgroup>
  <layer id="7" name="foreground" width="30" height="20">

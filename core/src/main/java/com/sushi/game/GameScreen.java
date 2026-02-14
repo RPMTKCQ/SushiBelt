@@ -11,15 +11,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sushi.game.asset.AssetService;
 import com.sushi.game.asset.MapAsset;
 import com.sushi.game.input.GameControllerState;
 import com.sushi.game.input.KeyboardController;
-import com.sushi.game.system.ControllerSystem;
-import com.sushi.game.system.MoveSystem;
-import com.sushi.game.system.RenderSystem;
+import com.sushi.game.system.*;
 import com.sushi.game.tiled.TiledAshleyConfigurator;
 import com.sushi.game.tiled.TiledService;
 
@@ -33,19 +33,28 @@ public class    GameScreen extends ScreenAdapter {
     private final TiledAshleyConfigurator tiledAshleyConfigurator;
     private final KeyboardController keyboardController;
     private final SushiGame game;
+    private final World physicWorld;
 
 
 
     public GameScreen(SushiGame game) {
         this.game = game;
         this.tiledService = new TiledService(game.getAssetService());
-        this.engine = new Engine();
-        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(this.engine,game.getAssetService());
+        this.engine = new Engine();this.physicWorld = new World(Vector2.Zero, true);
+        this.physicWorld.setAutoClearForces(false);
+        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(this.engine,game.getAssetService(),physicWorld);
         this.keyboardController = new KeyboardController(GameControllerState.class, engine);
+
+
 
         this.engine.addSystem(new ControllerSystem());
         this.engine.addSystem(new MoveSystem());
+        //this.engine.addSystem(new FSMSystem());
+        //this.engine.addSystem(new FacingSystem());
+        this.engine.addSystem(new PhysicSystem(this.physicWorld, 1/60f));
+        //this.engine.addSystem(new AnimationSystem(game.getAssetService()));
         this.engine.addSystem( new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
+        this.engine.addSystem(new PhysicDebugRenderSystem(physicWorld, game.getCamera()));
 
     }
 
@@ -57,6 +66,7 @@ public class    GameScreen extends ScreenAdapter {
         Consumer<TiledMap> renderConsumer = this.engine.getSystem(RenderSystem.class)::setMap;
         this.tiledService.setMapChangeConsumer(renderConsumer);
         this.tiledService.setLoadObjectConsumer(this.tiledAshleyConfigurator::onLoadObject);
+        this.tiledService.setLoadTileConsumer(this.tiledAshleyConfigurator::onLoadTile);
 
         TiledMap tiledMap = this.tiledService.loadMap(MapAsset.MAIN);
         this.tiledService.setMap(tiledMap);
@@ -82,6 +92,7 @@ public class    GameScreen extends ScreenAdapter {
                 disposableSytstem.dispose();
             }
         }
+        this.physicWorld.dispose();
 
     }
 }

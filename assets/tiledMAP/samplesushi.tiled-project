@@ -11,38 +11,51 @@
     ],
     "propertyTypes": [
         {
-            "id": 1,
-            "name": "ObjectType",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "Undefined",
-                "Playerr",
-                "Prop"
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 5,
+            "members": [
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 3
+                }
             ],
-            "valuesAsFlags": false
+            "name": "GameObject",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
         },
         {
             "color": "#ffa0a0a4",
             "drawFill": true,
-            "id": 2,
+            "id": 6,
             "members": [
                 {
-                    "name": "color",
-                    "type": "color",
-                    "value": ""
+                    "name": "friction",
+                    "type": "float",
+                    "value": 10
                 },
                 {
-                    "name": "diemension",
-                    "type": "string",
-                    "value": ""
+                    "name": "restitution",
+                    "type": "float",
+                    "value": 1
                 }
             ],
             "name": "Prop",
             "type": "class",
             "useAs": [
                 "property",
+                "map",
+                "layer",
+                "object",
                 "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
                 "project"
             ]
         }

@@ -12,9 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sushi.game.SushiGame;
 import com.sushi.game.asset.AssetService;
-import com.sushi.game.component.Controller;
-import com.sushi.game.component.Graphic;
-import com.sushi.game.component.Move;
+import com.sushi.game.component.*;
 import com.sushi.game.component.Transform;
 
 public class TiledAshleyConfigurator {
@@ -46,7 +44,7 @@ public class TiledAshleyConfigurator {
                             Vector2 scaling,
                             BodyDef.BodyType bodyType,
                             Vector2 relativeTo,
-                            String UserData) {
+                            Object UserData) {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
@@ -56,7 +54,7 @@ public class TiledAshleyConfigurator {
         Body body = physicWorld.createBody(bodyDef);
         body.setUserData(UserData);
         for (MapObject object : mapObjects) {
-            FixtureDef fixtureDef = TiledPhysics.fixtureDef(object, scaling, relativeTo);
+            FixtureDef fixtureDef = TiledPhysics.fixtureDefOf(object, scaling, relativeTo);
             Fixture fixture = body.createFixture(fixtureDef);
             fixture.setUserData(object.getName());
             fixtureDef.shape.dispose();
@@ -78,9 +76,29 @@ public class TiledAshleyConfigurator {
         );
         addEntityController(tileMapObject, entity);
         addEntityMove(tile, entity);
+        BodyDef.BodyType bodyType = getObjectBodyType(tile);
+        addEntityPhysic(tile.getObjects(), bodyType,Vector2.Zero, entity);
 
 
         this.engine.addEntity(entity);
+    }
+
+    private BodyDef.BodyType getObjectBodyType(TiledMapTile tile) {
+        String classType = tile.getProperties().get("type", String.class);
+        if("Prop".equals(classType)) {
+            return BodyDef.BodyType.StaticBody;
+        }
+        return BodyDef.BodyType.DynamicBody;
+    }
+
+    private void addEntityPhysic(MapObjects objects, BodyDef.BodyType bodyType, Vector2 relativeTo, Entity entity) {
+        if (objects.getCount() == 0) return;
+
+        Transform transform = Transform.MAPPER.get(entity);
+        Body body = createBody(objects, transform.getPosition(), transform.getScaling(), bodyType, relativeTo, entity);
+
+        // Pass only the body to the constructor
+        entity.add(new Physic(body));
     }
 
     private void addEntityMove(TiledMapTile tile, Entity entity) {
